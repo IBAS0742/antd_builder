@@ -1,0 +1,25 @@
+添加布局后，将组件加入到 index.js 中，并修改 defaultLayout 作为整体布局
+
+
+SliderHCF 布局格式如下
+由于 SliderHCF 是一个布局，对应的 content 用于承接变化的组件，因此通过一个 SliderHcfPage 将组件进行引入使用
+用户通过修改 SliderHcfPage 而不是 SliderHCF 来修改主布局，后面将定义并实例化众多的 slider header fotter 来该使布局多样化
+
+---------------------------------
+|   |        header             |
+| S |----------------------------
+| l |                           |
+| i |                           |
+| d |        content            |
+| e |                           |
+| r |                           |
+|   |----------------------------
+|   |         footer            |
+---------------------------------
+
+RouteView（这个目的是用来配置子页的缓存而不是一个布局）
+// 这里增加了 multiTab 的判断，当开启了 multiTab 时
+// 应当全部组件皆缓存，否则会导致切换页面后页面还原成原始状态
+// 若确实不需要，可改为 return meta.keepAlive ? inKeep : notKeep
+
+
