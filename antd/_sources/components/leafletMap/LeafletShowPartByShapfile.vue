@@ -11,7 +11,7 @@
     // 根据一组边界进行裁剪(自定义的一个 wms )
     import './utils/BoundayCanvasWMS'
 
-    const overInitWMS = function(shpfileUrl,wmsLayer) {
+    const overInitWMS = function(shpfileUrl,wmsLayer,map) {
         fetch(shpfileUrl,{
             method: 'GET',
             mode: 'cors',
@@ -24,6 +24,7 @@
                 wmsLayer.redrawAll({
                     // boundary: e.layer.toGeoJSON(),
                 });
+                map.fitBounds(track.getBounds());
             })
     };
 
@@ -124,7 +125,7 @@
                 let wmsLayer = L.tileLayer.mywms(this.url, {
                     ...this.params
                 },true);
-                overInitWMS(this.shpfileUrl,wmsLayer);
+                overInitWMS(this.shpfileUrl,wmsLayer,this.map);
                 this.$nextTick(() => {
                     wmsLayer.addTo(this.map);
                 });

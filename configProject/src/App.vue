@@ -104,6 +104,7 @@
             }
         },
         mounted() {
+            this.selectConfig(this.configTypes[0]);
             window.app = this;
         }
     }

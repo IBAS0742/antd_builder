@@ -12,6 +12,32 @@ const defaultStep = {
     addPage: '_addPage'
 };
 
+class Preview {
+    constructor(componentsName,props,userDefaultProps,dearProps,getComponentName) {
+        this.componentsName = componentsName;
+        this.props = props;
+        this.userDefaultProps = userDefaultProps || true;
+        this.dearProps = dearProps || (_ => _);
+        this.deafComponentName = getComponentName || (_ => _).bind(null,this.componentsName);
+    }
+
+    getComponentName(something) {
+        if (this.userDefaultProps) {
+            return this.componentsName;
+        } else {
+            return this.deafComponentName(something);
+        }
+    }
+
+    getProps(something) {
+        if (this.userDefaultProps) {
+            return this.props;
+        } else {
+            return this.dearProps(something);
+        }
+    }
+}
+
 class Step {
     constructor(name) {
         this.name = name;
@@ -20,6 +46,7 @@ class Step {
         this.configsDefaultVal = ''; //'stepName.key -> value';
         this.configsBaseOn = ''; //'stepName.key';
         this.multi = false;
+        this.previews = [];
     }
 
     addConfig() {
@@ -40,6 +67,11 @@ class Step {
         Array.prototype.slice.call(arguments).filter((_,ind) => ind).map(_ => {
             this.configs[name][_.key] = _;
         });
+        return this;
+    }
+
+    addPreviews(p) {
+        this.previews = this.previews.concat(p instanceof Array ? p : [p]);
         return this;
     }
 }
@@ -69,6 +101,7 @@ class Process {
 }
 
 module.exports = {
+    Preview,
     Step,
-    Process
+    Process,
 };

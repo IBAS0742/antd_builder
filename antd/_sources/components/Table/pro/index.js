@@ -60,7 +60,7 @@ export default {
             default: false
         },
         showPagination: {
-            type: String,
+            type: [String,Boolean],
             default: 'auto'
         }
     }),

@@ -1,4 +1,5 @@
 const {
+    Preview,
     Process
 } = require('../utils/Step');
 const {
@@ -24,15 +25,26 @@ let step2 = process.addStep("Layout")
             .addOption(
                 new Radio("HeaderSC",false)
                     .setTip("布局一")
-                    .setPic(require("./src/layout1.png"))
+                    //.setPic(require("./src/layout1.png"))
             )
             .addOption(
                 new Radio("SliderHCF",false)
                     .setTip("布局二")
-                    .setPic(require("./src/layout2.jpg"))
+                    //.setPic(require("./src/layout2.jpg"))
             )
             .selectFirst()
-    );
+    ).addPreviews([
+        new Preview('HeaderSCPage',{
+            layoutStyle: {
+                height: '500px'
+            }
+        }),
+        new Preview('SliderHcfPage',{
+            layoutStyle: {
+                height: '500px'
+            }
+        })
+    ]);
 
 let headerConponents = () => {
     return new CheckBoxGrop("header.components",[])
@@ -61,7 +73,9 @@ process.addStep("LayoutSetting")
         new Input('slider.background','#fff').setTip("设置侧栏背景颜色"),
         new CheckBox('hasFoot',true).setTip("是否有foot部分"),
         new Input('footer.content','').setTip("foot 内容(html)"),
-    );
+    ).addPreviews([
+        new Preview('HeaderSCPage',{},true,)
+    ]);
 
 process.addDefaultStep(process.defaultStep.addPage);
 

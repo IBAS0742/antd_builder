@@ -15,10 +15,7 @@
 <script>
     import STable from "../components/Table/pro/index.js"
 
-    const getTableData1561974286116 = ({
-                                           pageNo,
-                                           pageSize
-                                       }) => {
+    const getTableData1561974286116 = ({ }) => {
         return new Promise(s => {
             s({
                 "message": "",

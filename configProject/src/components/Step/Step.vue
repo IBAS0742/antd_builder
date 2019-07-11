@@ -24,6 +24,7 @@
             <slot name="btns"></slot>
         </div>
         <component v-for="(sl,ind) in stepList" :key="sl" :title="sl" :ref="sl"
+                   :preview="steps[sl].previews || []"
                    v-show="current === ind"
                    :is="(() => {
                         if (steps[sl].name[0] === '_') {

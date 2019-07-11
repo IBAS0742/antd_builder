@@ -1,6 +1,7 @@
 <template>
-    <a-row>
-        <a-col :span="6">
+    <AddPageFramework>
+        <div slot="left">
+            <div style="height: 30px;"></div>
             <MyModal :visible="qModal.qModalVisible" :width="qModal.width">
                 <div style="text-align: center" v-show="qModal.qModalType === 'folder'">
                     <a-button @click="action('createFolder')" type="primary" icon="folder">Create Directory</a-button>
@@ -32,10 +33,15 @@
             <MyTree @rightClick="rightClick"
                     @click="click"
                     :pages="pages" ref="mytree"></MyTree>
-        </a-col>
-        <a-col :span="18">
+        </div>
+        <div slot="right">
             <div v-if="selectNodeTag">
                 <div v-if="selectNodeTag.type === 'folder'">
+                    <div style="margin-bottom: 5px;">
+                        <a-button style="margin-right: 5px;" @click="action('createFolder')" type="primary" icon="folder">Create Directory</a-button>
+                        <a-button style="margin-right: 5px;" @click="action('createPage')" icon="file-text">Create Page</a-button>
+                        <a-button style="margin-right: 5px;" @click="action('delete')" type="danger" icon="delete">Delete Directory</a-button>
+                    </div>
                     <div style="display: inline-block;width: 100px;">文件夹名称</div>
                     <a-input style="display: inline-block;width: calc(100% - 100px);" v-model="selectNodeTag.FolderName"></a-input>
                 </div>
@@ -61,8 +67,8 @@
             <div v-else>
                 点击树节点修改信息
             </div>
-        </a-col>
-    </a-row>
+        </div>
+    </AddPageFramework>
 </template>
 
 <script>
@@ -72,6 +78,7 @@
     } from './Page';
     import MyTree from "../../../Tree/MyTree";
     import Components from "./Components";
+    import AddPageFramework from "./AddPageFramework";
     const comps = require('./../../../../buildConfig/components');
 
     let tmp = new Folder("views");
@@ -79,7 +86,7 @@
 
     export default {
         name: "AddPage",
-        components: {Components, MyTree, MyModal},
+        components: {AddPageFramework, Components, MyTree, MyModal},
         data() {
             return {
                 qModal: {
@@ -106,6 +113,7 @@
         },
         methods: {
             click(node) {
+                this.rightSelectNodeTag = this.pages.getPageOrFolderByNode(node.label);
                 this.selectNodeTag = this.pages.getPageOrFolderByNode(node.label);
             },
             rightClick({ node }) {

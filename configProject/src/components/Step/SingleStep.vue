@@ -1,7 +1,22 @@
 <template>
-    <a-form layout="horizontal">
-        <component ref="comp" v-for="v in config" :key="v.key" :setting="v" :is="'My' + v.type.UpperFirstChat()"></component>
-    </a-form>
+    <div>
+        <a-form layout="horizontal">
+            <component ref="comp" v-for="v in config" :key="v.key"
+                       :setting="v" :is="'My' + v.type.UpperFirstChat()"></component>
+        </a-form>
+        <div v-if="preview.length">
+            <a-button @click="previewSetting.visible = true;">预览</a-button>
+            <a-drawer
+                    title="预览"
+                    placement="right"
+                    width="90%"
+                    @close="previewSetting.visible = false;"
+                    :visible="previewSetting.visible">
+                <component v-for="p in preview" :is="p.getComponentName(config)" v-bind="p.getProps(config)"
+                           style="margin-bottom: 10px;border: 1px solid;padding: 5px;"/>
+            </a-drawer>
+        </div>
+    </div>
     <!--<div>-->
         <!--<component v-for="v in config.config" :key="v.key" :setting="v" :is="'My' + v.type.UpperFirstChat()"></component>-->
     <!--</div>-->
@@ -25,9 +40,20 @@
         components: {
             ...FormItem
         },
+        props: {
+            preview: {
+                type: Array,
+                default() {
+                    return [];
+                }
+            }
+        },
         data() {
             return {
-                config: {}
+                config: {},
+                previewSetting: {
+                    visible: false
+                }
             }
         },
         methods: {
@@ -40,7 +66,7 @@
             }
         },
         mounted() {
-            // window.ss = window.ss ? window.ss.push(this) :[this];
+            window.ss = window.ss instanceof Array ? window.ss.push(this) :[this];
         }
     }
 </script>
