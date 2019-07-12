@@ -79,7 +79,7 @@ class PageClass {
         this.components = [];
         this.data = {};
         this.events = [];
-        this.eventTemplate = '() { console.log(arguments); },';
+        this.eventTemplate = '() { console.log(arguments); }';
         this.more = '';
     }
 

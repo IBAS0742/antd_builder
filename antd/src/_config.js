@@ -40,7 +40,8 @@ module.exports = {
                             "import": [
                                 "/components/leafletMap/BaseLeafLet.vue"
                             ],
-                            "events": []
+                            "events": [],
+                            "buildEPT": false
                         }
                     ]
                 }
@@ -83,7 +84,8 @@ module.exports = {
                             "events": [
                                 "mouseover",
                                 "click"
-                            ]
+                            ],
+                            "buildEPT": false
                         }
                     ]
                 }
@@ -118,7 +120,7 @@ module.exports = {
                             },
                             "templateName": "STable",
                             "import": [
-                                "/components/Table/pro/index.js:STable"
+                                "/components/Table/pro/DomUtils.js:STable"
                             ],
                             "events": [],
                             "buildEPT": "/components/Table/pro/buildPage.js"

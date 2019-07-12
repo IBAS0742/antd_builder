@@ -1,6 +1,7 @@
 const {
     checkTypes
 } = require('./smallUtils');
+const objectTypeDear = require('./../objectTypeDear.js');
 
 const FormItemName = {
     Input: 'input',
@@ -20,6 +21,17 @@ const objectType = {
     int: 'int',
     float: 'float',
 };
+
+function defaultObjToProp(keyVal,keyType) {
+    let props = {};
+    for (let i in keyVal) {
+        props[i] = objectTypeDear[keyType[i]](keyVal[i]);
+        if (!props[i]) {
+            delete props[i]
+        }
+    }
+    return props;
+}
 
 class BaseFormItem {
     constructor(key,value) {
@@ -245,4 +257,5 @@ module.exports = {
     Switch,
     Selection,
     FormItemName,
+    defaultObjToProp
 };

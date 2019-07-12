@@ -14,7 +14,7 @@ const STable = () => new ComponentSetting("STable")
     .addDep([
         "/components/Table/pro/index.js",
     ])
-    //.setTemplateName('STable')
+    .setTemplateName('STable')
     .setImport('/components/Table/pro/index.js:STable')
     .addFormItems([
         new Textarea('columns','')

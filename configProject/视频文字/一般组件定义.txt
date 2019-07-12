@@ -1,0 +1,50 @@
+组件定义的完整说明
+1.定义一个组件（现在 antd 项目中定义一个组件）
+	定义了一个需要一个参数的组件
+2.然后再项目中直接引入并测试
+	这里仅仅测试，至于如何测试看个人
+3.将定义好的组件，复制到 _resource 中
+4.到 configProject 项目中的 /src/buildConfig/components
+	下定义刚刚定义的组件
+	可以在其他文件中找一个为模板进行修改
+.addDep([
+        "/components/leafletMap/utils/addControl.js",
+        "/components/leafletMap/BaseLeafLet.vue"
+    ])
+    .setTemplateName('BaseLeafLet')
+    .setImport('/components/leafletMap/BaseLeafLet.vue')
+例如这里的 addControl.js 其实已经引入到 BaseLeaflet.vue 中了
+5.定义好组件后，将组件加入到 src/builderConfig/components.js 中
+6.启动项目（我已经启动了）
+7.注意到这个组件有预览功能，刚刚定义的却没有？？
+	看一下预览功能，这里依旧有一个问题，就是修改组件信息
+	左边预览没有变化，但是注意到一点，左边上方有一个刷新按钮
+	刚刚有点燥
+8.为刚刚定义的组件定义一个预览
+	8.1.直接 通过 setPreview 进行配置
+	8.2 这里先用默认值进行尝试先
+	8.3 其实这里有个问题，你先预览，但是却没有组件定义
+	      这里给一个方案，也是推荐方案，但是有一定的问题
+	      先接着先
+		8.3.1 复制组件到 configProject 工程
+			复制到哪都一样，我那里只是为了统一管理
+			这里体现了刚刚要定义 name 的用途了
+	8.4 可以预览了，但是希望他能根据我们定义的内容去预览
+		这里的 something 其实是一个 ComponentSetting 对象
+		也就是我们定义的 MyDefinedOne
+		module.exports = MyDefinedOne; // 这个
+	8.5 这里先表述一般组件的属性使用
+		8.5.1 引入 objectTypeDear // 这里定义默认属性的转换方法
+		8.5.2 这里已经可以使用，但是其实已经定义了默认的方法
+		这里对于 ComponentSetting 对象看源码理解吧
+	8.6 这里还有一个问题没有说明，就是『刷新』问题
+		这个刷新不是没有用的，如何定义？
+		.setRebuildMethod('renderMap')
+		这里是直接调用组件中的方法，所以这里的刷新本质上
+		是组件自己定义的刷新，因为某些组件属性变化不会引起
+		组件重新渲染，可能也是其他原因所致
+
+组件的定义，放置位置及定义和预览 过程就如上
+但是这是一般组件的定义
+
+特殊组件有更多的内容

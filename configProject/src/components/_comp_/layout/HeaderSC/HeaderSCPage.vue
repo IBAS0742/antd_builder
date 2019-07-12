@@ -1,19 +1,22 @@
 <template>
-    <header-s-c :collapsed="collapsed" silderWidth="300px" :layoutStyle="layoutStyle">
+    <header-s-c :collapsed="collapsed" :silderWidth="sliderWidth" :layoutStyle="layoutStyle">
         <div slot="header">
-            <MenuCollapsed :collapsed="collapsed" @toggle="toggle"></MenuCollapsed>
-			<UserMenu></UserMenu>
+            <MenuCollapsed :collapsed="collapsed" @toggle="toggle"
+                           v-if="headerComponents.includes('MenuCollapsed')"></MenuCollapsed>
+			<UserMenu v-if="headerComponents.includes('UserMenu')"></UserMenu>
         </div>
         <template slot="sider">
             <SMenu :menu="testRoute" theme="light"></SMenu>
         </template>
-        <GeminiScrollbar slot="content" :style="{height: contentHeight}">
+        <!--<GeminiScrollbar slot="content" :style="{height: contentHeight}">-->
+        <div slot="content">
             <!-- todo -->
-            <PageHeader></PageHeader>
+            <PageHeader v-if="Breadcrumb"></PageHeader>
             <transition name="page-transition">
                 <div>布局一</div>
             </transition>
-        </GeminiScrollbar>
+        </div>
+        <!--</GeminiScrollbar>-->
     </header-s-c>
 </template>
 
@@ -32,6 +35,21 @@
             layoutStyle: {
                 default() {
                     return {};
+                }
+            },
+            Breadcrumb: {
+                default() {
+                    return true;
+                }
+            },
+            headerComponents: {
+                default() {
+                    return ['MenuCollapsed','UserMenu'];
+                }
+            },
+            sliderWidth: {
+                default() {
+                    return '300px';
                 }
             }
         },

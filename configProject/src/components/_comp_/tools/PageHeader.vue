@@ -1,18 +1,14 @@
 <template>
     <div class="page-header">
         <div class="page-header-index-wide">
-            <a-breadcrumb class="breadcrumb">
+            <a-breadcrumb class="breadcrumb" style="margin: 0;">
                 <a-breadcrumb-item v-for="(item, index) in breadList" :key="index">
-                    <router-link
-                            v-if="item.name != name && index != 1"
-                            :to="{ path: item.path === '' ? '/' : item.path }"
-                    >{{ item.meta.title }}</router-link>
-                    <span v-else>{{ item.meta.title }}</span>
+                    <span>{{ item }}</span>
                 </a-breadcrumb-item>
             </a-breadcrumb>
         </div>
         <div v-if="title">
-            <h1>{{title}}</h1>
+            <h1 style="font-size:1.5em;margin: 0;">{{title}}</h1>
         </div>
     </div>
 </template>
@@ -22,28 +18,9 @@
         name: 'PageHeader',
         data () {
             return {
-                name: '',
-                breadList: [],
-                title: ''
-            }
-        },
-        created () {
-            this.getBreadcrumb()
-        },
-        methods: {
-            getBreadcrumb () {
-                this.breadList = [];
-                this.name = this.$route.name;
-                this.title = this.$route.meta.title;
-                this.$route.matched.forEach((item) => {
-                    // item.name !== 'index' && this.breadList.push(item)
-                    this.breadList.push(item)
-                })
-            }
-        },
-        watch: {
-            $route () {
-                this.getBreadcrumb()
+                name: 'home.page.test',
+                breadList: ['home','page','test'],
+                title: 'home.page.test'
             }
         }
     }
@@ -52,7 +29,7 @@
 <style lang="less" scoped>
     .page-header {
         background: #fff;
-        padding: 16px 32px 0;
+        padding: 4px;
         border-bottom: 1px solid #e8e8e8;
         .breadcrumb {
             margin-bottom: 16px;

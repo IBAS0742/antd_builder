@@ -13,6 +13,7 @@ class ComponentSetting {
         // 用于构建模板和修改数据及方法的 特定文件
         // ( module.exports = ({eventBind,params}) => { return { eventBind,params,template } })
         this.buildEPT = false;
+        this.previewSetting = null;
     }
 
     setBuildEPT(ept) {
@@ -76,6 +77,15 @@ class ComponentSetting {
         (event instanceof Array ? event : [event]).forEach(_ => {
             !this.events.includes(_) ? this.events.push(_) : true;
         });
+        return this;
+    }
+
+    havePreview() {
+        return !!this.previewSetting;
+    }
+
+    setPreview(pre) {
+        this.previewSetting = pre;
         return this;
     }
 }

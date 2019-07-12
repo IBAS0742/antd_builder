@@ -80,7 +80,6 @@
         },
         mounted() {
             setTimeout(this.build,500);
-            window.$atcbt = this;
         }
     }
 </script>

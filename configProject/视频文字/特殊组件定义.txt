@@ -1,0 +1,148 @@
+说明特殊组件的定义方法
+1.首先说明一下一般组件的生成方法（）
+    1.这里定义了三个页面，同时每个页面有一个组件
+    2.直接将导出的内容复制到 antd 项目的 _config.js 中
+        这里就是对应 网页中 定义的三个页面
+        这个对应的是 网页中 的组件，只有一个，所以数组内只有一个对象
+    3.生成页面，
+        打开 _buildAll.js ，这里暂时将 layoutBuild 部分屏蔽
+        这里本质上就是调用了 buildPages 的代码
+        右键运行即可
+        呃，这里说明一下，页面暂时生成在 views_bak 里面
+        呃，可能前面不小心改错了
+        看到生成了三个页面
+        呃，有个bug，视频后再处理（这里的bug我先默认没有，让我假装一下。。。好吧，没有
+        不是这里）
+        这里我们看一下三个文件，
+        1）Bing.vue
+        2）_config.js
+        3）LeafletShp 组件在 configProject 中的定义
+        这里 3）部分基本上被完整复制到 2）的里面了
+
+        这里大概就理清楚了一般组件的代码生成原理
+        这里 events mouseover 会变成 LeafletShp0 + mouseover
+
+   4.其实这里有一个特殊组件 STable
+        STable 中定义了一个 buildEPT = /components/Table/pro/buildPage.js
+        这个文件的位置是 _sources/components/Table/pro/buildPage.js
+        1.为什么定义这个文件？
+            最粗暴的理由就是这个组件的生成过程比较特殊
+            一般组件
+            //LeafletShp0['url']
+            <组件名 :属性1="id.属性名" :属性2="id.属性名" />
+            而 table 中有比较神奇的事情需要做
+            呃，因为这里用的是 ant.design 的组件
+            所以使用的时候必然是
+            <table>
+                <span slot="tags" slot-scope="tags">
+                  <a-tag v-for="tag in tags" color="blue" :key="tag">{{tag}}</a-tag>
+                </span>
+            </table>
+            这里其实引发另一个问题，
+        2.如果定义了某些附加属性，
+        而这些属性仅仅是为了辅助而不是 props 需要的对象，
+        那是要删除还是直接当作不知道注入？
+            例如 STable 中的action // 不知道什么情况。。o oooo哦，
+            可以看到 STable 的 props 中 没有 action
+            其实还有很多类似的问题，包括如果定义了特殊的方法，
+
+            另外 table 有一个问题需要解决，就是定义 table 的同时是否定义好请求？
+            因为我会迫不及待想看一下定义的表格长什么样
+            所以我自定义了一个模板中，定义了 getTable 方法
+            我们将他加入到路由中看一下
+            可以立即看到，或者说可能还有很多其他内容，如果写到默认的生成中，会导致配置过于臃肿
+            如果把特殊提取出来可能更有利
+
+2.看一下 STable 中到底定义了什么，并且函数应该如何定义
+    1.STable 定义的内容就是 _buildPages 中 page 对象的 addData 方法
+
+        addData 的大概流程是
+        1.定义组件的属性名集合名 STable0
+        2.将方法名定义好   STable0delete STable0edit STable0OnSelectChange
+        3.将参数格式化    {a:'[ibas]'} => {a : ["ibas"] }
+        4.生成参数模板    paramStr.push(`:${i}="${dataName}['${i}']"`)
+                    :data="STable0.getTableData1562927503345"
+                    :columns="STable0['columns']"
+                    :showPagination="STable0['showPagination']"
+                    :size="STable0['size']"
+        5.如果没有 EPT （就是自定义的 event props template 生成方法） 的话，就直接
+            将上面生成的内容生成模板
+        6.添加事件 这个是将事件添加到输出的 vue 中的（不展开）
+                STable0delete(record, index) {
+                    console.log(record, index)
+                }
+
+        STable 在上述流程中，在 5 执行了分支另一部分
+        5.1 STable 执行了 buildEPT 方法，定义在 _sources/components/Table/pro/buildPage.js 中
+            // .setBuildEPT("/components/Table/pro/buildPage.js")
+            该方法接受 四个参数
+                eventBind 一个数组，可以进行数组操作，主要是用来添加其他需要额外定义的方法，
+                            当然如果没用到可以直接返回
+                            // 其实相当粗暴，因为 function 没办法被序列化
+                            // 这里还是期望使用者对生成代码进行二次修改
+                            eventBind.push(['STable0_MyMethod()','{ console.log() }'])
+                params      这个其实是 params 本身，没有经过任何处理的
+                paramStr    这个是上面的（如果没修改也可以加入到模板中）
+                                        :data="STable0.getTableData1562927503345"
+                                        :columns="STable0['columns']"
+                                        :showPagination="STable0['showPagination']"
+                                        :size="STable0['size']"
+                dataName    这个可以用于添加新属性和方法是 STable0 每个组件特有的名称
+
+            输出四个参数（EPT）
+                eventBind
+                params
+                template    他是一个完整模板，例如返回内容可以是
+                            <STable :data="data" :columns="columns"/>
+                            或者
+                            <div> <- 注意他，根组件必须只有一个
+                                <h1>我是标题</h1>
+                                <STable :data="data" :columns="columns"/>
+                            </div>
+                            他不会被进行二次修改
+                more        这个是比较神奇的地方，因为有写部分是需要被添加到输出中的，但是他不是一个
+                            html 的内容，而是一个 js
+                            这部分会被添加到  export default 之前
+                            参考下面
+                    template = template.replace('$tpl$',this.tpl.join('\n') || '<div></div>');
+                    template = template.replace('$import$',this.import.join('\n'));
+                    template = template.replace('$components$',this.components.join(','));
+                    template = template.replace('$data$',((data) => {
+                        let dataStr = "{\n";
+                        for (let i in data) {
+                            if (typeof data[i] === 'string') {
+                                dataStr += '"' + i + '"' + ' : ' + data[i] + ','
+                            } else {
+                                dataStr += '"' + i + '"' + ':' + JSON.stringify(data[i],'','\t');
+                            }
+                        }
+                        return dataStr + '}'
+                    })(this.data));
+                    template = template.replace('$methods$',this.events.join(',\n'));
+                    template = template.replace('$more$',this.more);
+
+3.over 以上就是特殊组件的定义方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

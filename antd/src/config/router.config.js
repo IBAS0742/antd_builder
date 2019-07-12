@@ -62,24 +62,12 @@ export const asyncRouterMap = [
                         component: () => import('./../views/TestForm1.vue'),
                         meta: { title: 'TestForm1', keepAlive: false }
                     },
-                    // {
-                    //     path: '/dashboard/showTableVue',
-                    //     name: 'showTableVue',
-                    //     component: () => import('./../views_bak/STableShow'),
-                    //     meta: { title: 'showTable', keepAlive: false }
-                    // },
-                    // {
-                    //     path: '/dashboard/IBAS',
-                    //     name: 'IBAS',
-                    //     component: () => import('./../views_bak/IBAS.vue'),
-                    //     meta: { title: '测试三', keepAlive: false }
-                    // },
-                    // {
-                    //     path: '/dashboard/Bing',
-                    //     name: 'Bing',
-                    //     component: () => import('./../views_bak/Bing.vue'),
-                    //     meta: { title: '测试三', keepAlive: false }
-                    // },
+                    {
+                        path: '/dashboard/TestSTable',
+                        name: 'TestSTable',
+                        component: () => import('./../views_bak/STableShow.vue'),
+                        meta: { title: 'TestSTable', keepAlive: false }
+                    },
                 ]
             }
         ]

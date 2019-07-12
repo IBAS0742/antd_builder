@@ -1,21 +1,29 @@
 <template>
     <div>
-        <a-form layout="horizontal">
-            <component ref="comp" v-for="v in config" :key="v.key"
-                       :setting="v" :is="'My' + v.type.UpperFirstChat()"></component>
-        </a-form>
-        <div v-if="preview.length">
+        <div v-if="preview.length" style="margin: 5px 0;">
             <a-button @click="previewSetting.visible = true;">预览</a-button>
             <a-drawer
-                    title="预览"
+                    :mask="previewSetting.mask"
                     placement="right"
-                    width="90%"
+                    :width="previewSetting.width"
                     @close="previewSetting.visible = false;"
                     :visible="previewSetting.visible">
-                <component v-for="p in preview" :is="p.getComponentName(config)" v-bind="p.getProps(config)"
+                <div slot="title">
+                    预览
+                    <a-button @click="fit(true)"
+                              v-show="!previewSetting.fit">固定到一边</a-button>
+                    <a-button @click="fit(false)"
+                              v-show="previewSetting.fit">解除固定</a-button>
+                </div>
+                <component v-for="p in preview" :is="p.getComponentName(config,defaultVal)"
+                           v-bind="p.getProps(config,defaultVal)"
                            style="margin-bottom: 10px;border: 1px solid;padding: 5px;"/>
             </a-drawer>
         </div>
+        <a-form layout="horizontal" :style="previewSetting.style">
+            <component ref="comp" v-for="v in config" :key="v.key"
+                       :setting="v" :is="'My' + v.type.UpperFirstChat()"></component>
+        </a-form>
     </div>
     <!--<div>-->
         <!--<component v-for="v in config.config" :key="v.key" :setting="v" :is="'My' + v.type.UpperFirstChat()"></component>-->
@@ -46,13 +54,21 @@
                 default() {
                     return [];
                 }
+            },
+            defaultVal: {
+                default: ''
             }
         },
         data() {
             return {
                 config: {},
                 previewSetting: {
-                    visible: false
+                    mask: true,
+                    visible: false,
+                    fit: false,
+                    width: '90%',
+                    style: {
+                    }
                 }
             }
         },
@@ -63,10 +79,32 @@
                     ret[_.settingCP.key] = _.settingCP;
                 });
                 return ret;
+            },
+            fit(statue) {
+                this.previewSetting.fit = statue;
+                if (statue) {
+                    this.previewSetting.width = '50%';
+                    this.previewSetting.style = {
+                        width: '50%'
+                    };
+                    this.previewSetting.mask = false;
+                } else {
+                    this.previewSetting.width = '90%';
+                    this.previewSetting.style = {
+                        width: '100%'
+                    };
+                    this.previewSetting.mask = true;
+                }
             }
         },
         mounted() {
-            window.ss = window.ss instanceof Array ? window.ss.push(this) :[this];
+        },
+        watch: {
+            'previewSetting.visible'(nval) {
+                if (!nval) {
+                    this.fit(false);
+                }
+            }
         }
     }
 </script>

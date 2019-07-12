@@ -1,9 +1,12 @@
 const {
     Input,
-    objectType
+    objectType,
+    Textarea,
+    defaultObjToProp
 } = require('../utils/FormItems');
 
 const ComponentSetting = require('./../utils/ComponentSetting');
+const { Preview } = require('./../utils/Step');
 
 const LeafletShp = () => new ComponentSetting("BaseLeafletShp")
     .addEvent(['mouseover','click'])
@@ -15,7 +18,7 @@ const LeafletShp = () => new ComponentSetting("BaseLeafletShp")
     .setTemplateName('LeafletShp')
     .setImport('/components/leafletMap/LeafletShp.vue')
     .addFormItems([
-        new Input('url','[]').setTip('地图的瓦片基础链接').setMoreTip("shpfile 的 geojson 路径，数组")
+        new Textarea('url','[]').setTip('地图的瓦片基础链接').setMoreTip("shpfile 的 geojson 路径，数组")
             .setObjectType(objectType.array),
         new Input('center','').setTip('地图中心点').setMoreTip("格式是 [ lng,lat ]")
             .setObjectType(objectType.array),
@@ -27,7 +30,13 @@ const LeafletShp = () => new ComponentSetting("BaseLeafletShp")
         new Input('controls','[]').setTip('地图上控件')
             .setMoreTip("控件，需要自己定义，这里不要修改").setDisable()
             .setObjectType(objectType.array),
-    ]).makeKeyVal();
+    ])
+    .makeKeyVal()
+    .setPreview(
+        new Preview('LeafletShp',{},true,(config) => {
+            return defaultObjToProp(config.makeKeyVal().keyVal,config.keyType);
+        }).setRebuildMethod('renderMap')
+    );
 
 LeafletShp.label = 'Leaflet地图插件--矢量图展示';
 module.exports = LeafletShp;

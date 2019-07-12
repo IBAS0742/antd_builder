@@ -1,23 +1,23 @@
 <template>
-    <AddPageFramework>
+    <AddPageFramework @changeWidth="ret => framework.width = ret">
         <div slot="left">
             <div style="height: 30px;"></div>
             <MyModal :visible="qModal.qModalVisible" :width="qModal.width">
                 <div style="text-align: center" v-show="qModal.qModalType === 'folder'">
-                    <a-button @click="action('createFolder')" type="primary" icon="folder">Create Directory</a-button>
+                    <a-button @click="action('createFolder')" type="primary" icon="folder">创建文件夹</a-button>
                     <br/>
-                    <a-button @click="action('createPage')" icon="file-text" style="margin-top: 1em;">Create Page</a-button>
+                    <a-button @click="action('createPage')" icon="file-text" style="margin-top: 1em;">创建页面</a-button>
                     <br/>
-                    <a-button @click="action('delete')" type="danger" icon="delete" style="margin-top: 1em;">Delete Directory</a-button>
+                    <a-button @click="action('delete')" type="danger" icon="delete" style="margin-top: 1em;">删除文件夹</a-button>
                     <br/>
-                    <a-button @click="qModal.qModalVisible = false" icon="close" style="margin-top: 1em;">Cancel</a-button>
+                    <a-button @click="qModal.qModalVisible = false" icon="close" style="margin-top: 1em;">取消</a-button>
                 </div>
                 <div style="text-align: center" v-show="qModal.qModalType === 'pages'">
                     <!--<a-button @click="action('copy')" icon="folder">Copy Page</a-button>-->
                     <!--<br/>-->
-                    <a-button @click="action('delete')" type="danger" icon="delete" style="margin-top: 1em;">Delete Page</a-button>
+                    <a-button @click="action('delete')" type="danger" icon="delete" style="margin-top: 1em;">删除页面</a-button>
                     <br/>
-                    <a-button @click="qModal.qModalVisible = false" icon="close" style="margin-top: 1em;">Cancel</a-button>
+                    <a-button @click="qModal.qModalVisible = false" icon="close" style="margin-top: 1em;">取消</a-button>
                 </div>
             </MyModal>
             <MyModal :visible="qFolder.visible">
@@ -38,9 +38,9 @@
             <div v-if="selectNodeTag">
                 <div v-if="selectNodeTag.type === 'folder'">
                     <div style="margin-bottom: 5px;">
-                        <a-button style="margin-right: 5px;" @click="action('createFolder')" type="primary" icon="folder">Create Directory</a-button>
-                        <a-button style="margin-right: 5px;" @click="action('createPage')" icon="file-text">Create Page</a-button>
-                        <a-button style="margin-right: 5px;" @click="action('delete')" type="danger" icon="delete">Delete Directory</a-button>
+                        <a-button style="margin-right: 5px;" @click="action('createFolder')" type="primary" icon="folder">创建文件夹</a-button>
+                        <a-button style="margin-right: 5px;" @click="action('createPage')" icon="file-text">创建页面</a-button>
+                        <a-button style="margin-right: 5px;" @click="action('delete')" type="danger" icon="delete">删除文件夹</a-button>
                     </div>
                     <div style="display: inline-block;width: 100px;">文件夹名称</div>
                     <a-input style="display: inline-block;width: calc(100% - 100px);" v-model="selectNodeTag.FolderName"></a-input>
@@ -60,7 +60,7 @@
                                  v-model="selectNodeTag.info.router"></a-input>
                     </div>
                     <div style="margin-bottom: 0.5em;">
-                        <Components :components="selectNodeTag.info.components"></Components>
+                        <Components :width="framework.width" :components="selectNodeTag.info.components"></Components>
                     </div>
                 </div>
             </div>
@@ -108,6 +108,9 @@
                 actions: {
                     defaultFolderName: 'folder',
                     defaultPageName: 'page',
+                },
+                framework: {
+                    width: (6 / 24 * 100) + '%'
                 }
             }
         },
@@ -140,7 +143,6 @@
             }
         },
         mounted() {
-            window.$ap = this;
         }
     }
 </script>

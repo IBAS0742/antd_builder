@@ -6,10 +6,10 @@
                     <a-icon type="setting" />
                 </a-button>
             </div>
-            <a-col :span="setting.value">
+            <a-col :span="setting.value" style="overflow:hidden;">
                 <slot name="left"></slot>
             </a-col>
-            <a-col :span="24 - setting.value">
+            <a-col :span="24 - setting.value" style="overflow:hidden;">
                 <slot name="right"></slot>
             </a-col>
         </a-row>
@@ -33,6 +33,11 @@
                     visible: false,
                     value: 6
                 }
+            }
+        },
+        watch: {
+            'setting.value'() {
+                this.$emit('changeWidth',(this.setting.value / 24 * 100) + '%')
             }
         }
     }

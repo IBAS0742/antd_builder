@@ -176,7 +176,7 @@
 </script>
 
 <style scoped>
-    @import "../../../node_modules/leaflet/dist/leaflet.css";
+    @import "~leaflet/dist/leaflet.css";
 
     #umap {
         width: 100%;

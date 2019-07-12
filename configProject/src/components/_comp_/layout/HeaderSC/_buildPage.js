@@ -40,7 +40,6 @@ const tpl = `
             }
         },
         mounted() {
-            window.$page = this;
             let $this = this;
             window.onresize = function () {
                 $this.contentHeight = (window.innerHeight - 64) + 'px';

@@ -46,7 +46,7 @@ export default {
                     val.push(_.key);
                 }
             });
-            this.settingCP.value.splice(0,this.settingCP.value.length,val);
+            this.settingCP.value.splice(0,this.settingCP.value.length,...val);
         }
     },
     render(h) {

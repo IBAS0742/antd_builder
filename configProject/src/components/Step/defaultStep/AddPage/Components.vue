@@ -3,6 +3,24 @@
         <div style="margin-bottom: 0.5em;">
             <a-button @click="addComponents">添加组件</a-button>
         </div>
+        <a-drawer
+                :width="width"
+                wrapClassName="previewDrawer"
+                placement="left"
+                :mask="false"
+                style="overflow: hidden;"
+                @close="previewSetting.visible = false"
+                :visible="previewSetting.visible">
+            <div slot="title">
+                预览组件效果
+                <a-button @click="$refs.preview[previewSetting.rebuildMethod]()"
+                        v-show="previewSetting.rebuildMethod">刷新</a-button>
+            </div>
+            <component v-if="previewSetting.show"
+                       ref="preview"
+                    v-bind="previewSetting.comp.previewSetting.getProps(previewSetting.comp)"
+                    :is="previewSetting.comp.previewSetting.getComponentName()"></component>
+        </a-drawer>
         <a-collapse defaultActiveKey="1" v-show="components_bak.length">
             <a-collapse-panel v-for="(comp,ind) in components_bak"
                               :key="ind">
@@ -11,6 +29,9 @@
                     <a-button type="primary" icon="delete" @click.prevent.stop="removeComp(ind)">
                         删除
                     </a-button>
+                    <a-button icon="fullscreen" style="margin-left: 5px;"
+                              v-show="(comp.comp.havePreview ||(() => false)).bind(comp.comp)()"
+                              @click.prevent.stop="preview(comp)">预览</a-button>
                 </template>
                 <div>
                     <span style="width: 65px;display: inline-block;height: 32px;line-height: 32px;">组件类型</span>
@@ -40,7 +61,8 @@
             components: {
                 type: Array,
                 required: true
-            }
+            },
+            width: {}
         },
         computed: {
             components_bak() {
@@ -59,7 +81,13 @@
                         });
                     }
                     return options;
-                })(comps)
+                })(comps),
+                previewSetting: {
+                    visible: false,
+                    comp: null,
+                    show: false,
+                    rebuildMethod: false
+                }
             }
         },
         methods: {
@@ -77,6 +105,14 @@
             },
             removeComp(ind) {
                 this.components_bak.splice(ind,1);
+            },
+            preview({ comp }) {
+                console.log(comp);
+                window.$comp = comp;
+                this.previewSetting.comp = comp;
+                this.previewSetting.show = comp.havePreview();
+                this.previewSetting.visible = true;
+                this.previewSetting.rebuildMethod = (comp.previewSetting || {}).rebuildMethod;
             }
         },
         mounted() {
@@ -85,6 +121,11 @@
     }
 </script>
 
-<style scoped>
-
+<style>
+    .previewDrawer .ant-drawer-body{
+        position: relative;
+        width: 100%;
+        height: calc(100% - 65px);
+        padding: 0;
+    }
 </style>

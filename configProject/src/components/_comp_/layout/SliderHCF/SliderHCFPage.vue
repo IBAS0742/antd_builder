@@ -1,9 +1,11 @@
 <template>
     <slider-h-c-f :has-foot="hasFoot" :collapsed="collapsed" :layoutStyle="layoutStyle"
-                  :header-style="headerStyle" :slider-width="sliderWidth" :slider-bg-color="sliderBackground">
+                  :header-style="headerStyle" :slider-width="sliderWidth"
+                  :slider-bg-color="sliderBackground">
         <div slot="header" class="header">
-            <MenuCollapsed :collapsed="collapsed" @toggle="toggle"></MenuCollapsed>
-			<UserMenu></UserMenu>
+            <MenuCollapsed :collapsed="collapsed" @toggle="toggle"
+                           v-if="headerComponents.includes('MenuCollapsed')"></MenuCollapsed>
+            <UserMenu v-if="headerComponents.includes('UserMenu')"></UserMenu>
         </div>
         <template slot="logo">
             <h1>LOGO</h1>
@@ -12,13 +14,13 @@
             <SMenu :menu="testRoute" theme="light"></SMenu>
         </template>
         <GeminiScrollbar slot="content" :style="{height: contentHeight}">
-            <PageHeader></PageHeader>
+            <PageHeader v-if="Breadcrumb"></PageHeader>
             <transition name="page-transition">
                 <div>布局二</div>
             </transition>
         </GeminiScrollbar>
         <tmplate slot="footer">
-            
+            {{footContent}}
         </tmplate>
     </slider-h-c-f>
 </template>
@@ -39,20 +41,61 @@
                 default() {
                     return {};
                 }
+            },
+            Breadcrumb: {
+                default() {
+                    return true;
+                }
+            },
+            headerComponents: {
+                default() {
+                    return ['MenuCollapsed','UserMenu'];
+                }
+            },
+            sliderWidth: {
+                default() {
+                    return '300px';
+                }
+            },
+            footContent: {
+                default() {
+                    return '';
+                }
+            },
+            hasFoot: {
+                default() {
+                    return false;
+                }
+            },
+            headerStyleBackground: {
+                default() {
+                    return '#40a9ff !important'
+                }
+            },
+            headerStylePadding: {
+                default() {
+                    return '0 12px 0 0'
+                }
+            },
+            sliderBackground: {
+                default() {
+                    return '#fff'
+                }
+            }
+        },
+        computed: {
+            headerStyle() {
+                return {
+                    'background' : this.headerStyleBackground,
+                    'padding' : this.headerStylePadding
+                }
             }
         },
         data() {
             return {
                 testRoute,
                 collapsed: false,
-                headerStyle: {
-                    'background' : '#40a9ff !important',
-					'padding' : '0 12px 0 0'
-                },
-                sliderWidth: '300px',
-                sliderBackground: '#fff',
-                contentHeight: '',
-                hasFoot: false
+                contentHeight: ''
             }
         },
         methods: {

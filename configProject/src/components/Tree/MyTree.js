@@ -1,5 +1,6 @@
 import {
-    Tree
+    Tree,
+    Icon
 } from 'ant-design-vue'
 import {Folder} from "../Step/defaultStep/AddPage/Page";
 
@@ -10,13 +11,25 @@ let buildMethod = {
         return h(Tree.TreeNode,{
             props: {
                 label: key,
-                title: obj.pageName,
+                // title: obj.pageName,
                 isLeaf: true
             },
             domProps: {
                 key
             }
-        })
+        },[
+            h('span',{
+                slot: 'title'
+            },[
+                h(Icon,{
+                    props: {
+                        type: 'highlight'
+                    }
+                }),
+                h('span',{
+                },obj.pageName)
+            ])
+        ]);
     },
     renderFolderTreeNode(h,obj,treeData) {
         let $this = this;
@@ -25,12 +38,23 @@ let buildMethod = {
         return h(Tree.TreeNode,{
             props: {
                 label: key,
-                title: obj.FolderName
+                // title: obj.FolderName
             },
             domProps: {
                 key
             }
         },[
+            h('span',{
+                slot: 'title'
+            },[
+                h(Icon,{
+                    props: {
+                        type: 'folder-open'
+                    }
+                }),
+                h('span',{
+                },obj.FolderName)
+            ]),
             (() => {
                 let fs = [];
                 obj.folders.forEach((_) => {
@@ -73,7 +97,7 @@ export default {
         let $this = this;
         return h(Tree,{
             props: {
-                showLine: true,
+                // showLine: true,
                 defaultExpandAll: true
             },
             on: {

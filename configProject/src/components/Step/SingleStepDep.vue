@@ -1,5 +1,5 @@
 <template>
-    <SingleStep ref="ss"></SingleStep>
+    <SingleStep ref="ss" :preview="preview" :defaultVal="defaultVal"></SingleStep>
 </template>
 
 <script>
@@ -7,6 +7,13 @@
     export default {
         name: "SingleStepDep",
         components: {SingleStep},
+        props: {
+            preview: {
+                default() {
+                    return [];
+                }
+            }
+        },
         data() {
             return {
                 defaultVal: '',
